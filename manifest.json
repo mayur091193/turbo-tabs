@@ -1,0 +1,13 @@
+{
+	"name" : "ProTab",
+	"version" : "1",
+	"browser_action" : {
+		"default_icon" : "icon.png"
+	},
+	"permissions" : ["<all_urls>","tabs","notifications","storage", "bookmarks", "chrome://favicon/"],
+	"content_security_policy": "script-src 'self' 'unsafe-eval' https://cdn.jsdelivr.net; object-src 'self'",
+	"manifest_version" : 2,
+	"chrome_url_overrides" : {
+		"newtab" : "popup.html"
+	}
+}

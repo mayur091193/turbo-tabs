@@ -1,0 +1,151 @@
+<html>
+<head>
+    <link href="https://cdn.jsdelivr.net/npm/quasar@1.9.0/dist/quasar.min.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style type="text/css">
+        body {
+            margin: 0;
+            font: normal 75% Arial, Helvetica, sans-serif;
+        }
+
+        canvas {
+            display: block;
+            vertical-align: bottom;
+        }
+
+        /* ---- particles.js container ---- */
+        #particles-js {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-color: #000000;
+        }
+    </style>
+</head>
+<body>
+<div id="q-app">
+
+    <q-layout view="hHh Lpr lFf" v-cloak>
+        <section style="min-height: 30vh;" class="flex text-white flex-center layout_bg" id="particles-js">
+            <div class=" q-ma-sm bg-white rounded-borders" style="height: 38px;">
+                <q-avatar dense class="float-left" style="height: 37px">
+                    <img style="height: 25px;width: 25px;"
+                         src="https://avatars0.githubusercontent.com/u/1342004?s=400&v=4">
+                </q-avatar>
+
+                <q-input dense borderless v-model="text" input-class="text-right" class="text-black float-left">
+                    <template v-slot:append>
+                        <q-icon class="q-mr-sm" v-if="text === ''" name="search"></q-icon>
+                        <q-icon class="q-mr-sm cursor-pointer" v-else name="clear" @click="text = ''"></q-icon>
+                    </template>
+                </q-input>
+            </div>
+            <div class=" q-ma-sm bg-white rounded-borders" style="height: 38px;">
+                <q-avatar dense class="float-left" style="height: 37px">
+                    <img style="height: 25px;width: 25px;"
+                         src="https://cdn.iconscout.com/icon/free/png-256/wikipedia-7-569210.png">
+                </q-avatar>
+
+                <q-input dense borderless v-model="text" input-class="text-right" class="text-black float-left">
+                    <template v-slot:append>
+                        <q-icon class="q-mr-sm" v-if="text === ''" name="search"></q-icon>
+                        <q-icon class="q-mr-sm cursor-pointer" v-else name="clear" @click="text = ''"></q-icon>
+                    </template>
+                </q-input>
+            </div>
+            <q-fab
+                    v-model="fabLeft"
+                    vertical-actions-align="left"
+                    color="primary"
+                    icon="menu"
+                    direction="up"
+                    class="fixed-bottom-left q-ma-sm"
+            >
+                <q-fab-action label-position="right" color="primary" icon="bookmark" @click="fabLeft=true"
+                              label="Bookmarks" class="q-mr-md">
+                    <q-menu transition-show="rotate" transition-hide="rotate" max-width="300px" class="q-ml-md"
+                            anchor="bottom right" self="bottom left">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="text-white">
+                                    <q-toolbar class="bg-white text-black" style="border: 1px solid lightgray">
+                                        <q-toolbar-title class="text-grey-8">Bookmarks</q-toolbar-title>
+                                    </q-toolbar>
+                                    <!--<q-scroll-area :style="{'height':win_height+'px'}" style="border: 1px solid lightgrey">-->
+                                    <q-list dense separator>
+                                        <q-item-section class="q-pa-sm">
+                                            <q-input clearable dense outlined v-model="search_bookmark"
+                                                     label="Search"></q-input>
+                                        </q-item-section>
+                                        <q-item class="text-grey-9" clickable v-ripple
+                                                v-for="item in get_all_filtered_bookmarks" @click="goToUrl(item.url)">
+                                            <q-item-section avatar>
+                                                <q-avatar square>
+                                                    <!--<q-img style="width: 27px;" :src="'chrome://favicon/'+item.url"></q-img>-->
+                                                    <q-img style="width: 27px;"
+                                                           :src="'https://besticon-demo.herokuapp.com/icon?url='+item.url+'&size=32..50..120'"></q-img>
+                                                </q-avatar>
+                                            </q-item-section>
+                                            <q-item-section class="ellipsis-2-lines q-py-sm">{{item.title}}
+                                            </q-item-section>
+                                        </q-item>
+                                    </q-list>
+                                    <!--</q-scroll-area>-->
+                                </div>
+                            </div>
+                            <div class="col-9"></div>
+                        </div>
+                    </q-menu>
+                </q-fab-action>
+                <q-fab-action label-position="right" color="secondary" icon="tab" @click="fabLeft=true"
+                              label="Open tabs">
+                    <q-menu transition-show="rotate" transition-hide="rotate" max-width="300px" class="q-ml-md"
+                            anchor="bottom right" self="bottom left">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="text-white">
+                                    <q-toolbar class="bg-white text-black" style="border: 1px solid lightgray">
+                                        <q-toolbar-title class="text-grey-8">Open tabs</q-toolbar-title>
+                                    </q-toolbar>
+                                    <!--<q-scroll-area :style="{'height':win_height+'px'}" style="border: 1px solid lightgrey">-->
+                                    <q-list dense separator>
+                                        <q-item-section class="q-pa-sm">
+                                            <q-input clearable dense outlined v-model="search_open_tabs"
+                                                     label="Search"></q-input>
+                                        </q-item-section>
+                                        <q-item class="text-grey-9 q-px-xs" clickable v-ripple
+                                                v-for="item in get_all_open_tabs" @click="switchTab(item.id)">
+                                            <q-item-section avatar>
+                                                <q-avatar square>
+                                                    <q-img style="width: 27px;" :src="item.favIconUrl"></q-img>
+                                                </q-avatar>
+                                            </q-item-section>
+                                            <q-item-section class="ellipsis-2-lines q-py-sm">{{item.title}}
+                                            </q-item-section>
+                                        </q-item>
+                                    </q-list>
+                                    <!--</q-scroll-area>-->
+                                </div>
+                            </div>
+                            <div class="col-9"></div>
+                        </div>
+                    </q-menu>
+                </q-fab-action>
+            </q-fab>
+
+            <div class="fixed-bottom-right q-mr-md q-mb-xs text-weight-bold text-grey-7" style="font-size: 17px;">Made
+                with
+                <span style="color: #e25555;font-size: 19.5px;">&#9829;</span> using
+                <a target="_blank" class="text-indigo-5" style="text-decoration: none"
+                   href="https://quasar-framework.org">Quasar</a> for you.
+            </div>
+        </section>
+    </q-layout>
+</div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/material-design-lite/1.3.0/material.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/quasar@1.9.0/dist/quasar.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+<script src=statics/js/anotherscript.js></script>
+</html>
