@@ -1,1 +1,1 @@
-# Trubo Tabs - Chrome new tab extension.
+# Trubo Tabs - Chrome new tab extension
