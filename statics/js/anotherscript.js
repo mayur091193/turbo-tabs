@@ -8,7 +8,9 @@ new Vue({
             all_bookmarks: [],
             all_open_tabs: [],
             fabLeft: false,
-            text:''
+            text:'',
+            selected_index:null,
+            selected_index_bk:null,
         }
     },
     created() {
@@ -29,6 +31,20 @@ new Vue({
         });
     },
     methods: {
+        removeBookmark:function (objbookmark){
+            let self = this;
+            chrome.bookmarks.remove(objbookmark.id);
+            self.all_bookmarks = self.all_bookmarks.filter(function (item) {
+               return item.id != objbookmark.id;
+            });
+        },
+        closeTab:function (obj_tab){
+            let self = this;
+            chrome.tabs.remove(obj_tab.id);
+            self.all_open_tabs = self.all_open_tabs.filter(function (item) {
+               return item.id != obj_tab.id;
+            });
+        },
         process_bookmark: function (bookmarks) {
             let self = this;
             for (var i = 0; i < bookmarks.length; i++) {

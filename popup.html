@@ -27,32 +27,32 @@
 
     <q-layout view="hHh Lpr lFf" v-cloak>
         <section style="min-height: 30vh;" class="flex text-white flex-center layout_bg" id="particles-js">
-            <div class=" q-ma-sm bg-white rounded-borders" style="height: 38px;">
-                <q-avatar dense class="float-left" style="height: 37px">
-                    <img style="height: 25px;width: 25px;"
-                         src="https://avatars0.githubusercontent.com/u/1342004?s=400&v=4">
-                </q-avatar>
+            <!--<div class=" q-ma-sm bg-white rounded-borders" style="height: 38px;">-->
+            <!--<q-avatar dense class="float-left" style="height: 37px">-->
+            <!--<img style="height: 25px;width: 25px;"-->
+            <!--src="https://avatars0.githubusercontent.com/u/1342004?s=400&v=4">-->
+            <!--</q-avatar>-->
 
-                <q-input dense borderless v-model="text" input-class="text-right" class="text-black float-left">
-                    <template v-slot:append>
-                        <q-icon class="q-mr-sm" v-if="text === ''" name="search"></q-icon>
-                        <q-icon class="q-mr-sm cursor-pointer" v-else name="clear" @click="text = ''"></q-icon>
-                    </template>
-                </q-input>
-            </div>
-            <div class=" q-ma-sm bg-white rounded-borders" style="height: 38px;">
-                <q-avatar dense class="float-left" style="height: 37px">
-                    <img style="height: 25px;width: 25px;"
-                         src="https://cdn.iconscout.com/icon/free/png-256/wikipedia-7-569210.png">
-                </q-avatar>
+            <!--<q-input dense borderless v-model="text" input-class="text-right" class="text-black float-left">-->
+            <!--<template v-slot:append>-->
+            <!--<q-icon class="q-mr-sm" v-if="text === ''" name="search"></q-icon>-->
+            <!--<q-icon class="q-mr-sm cursor-pointer" v-else name="clear" @click="text = ''"></q-icon>-->
+            <!--</template>-->
+            <!--</q-input>-->
+            <!--</div>-->
+            <!--<div class=" q-ma-sm bg-white rounded-borders" style="height: 38px;">-->
+            <!--<q-avatar dense class="float-left" style="height: 37px">-->
+            <!--<img style="height: 25px;width: 25px;"-->
+            <!--src="https://cdn.iconscout.com/icon/free/png-256/wikipedia-7-569210.png">-->
+            <!--</q-avatar>-->
 
-                <q-input dense borderless v-model="text" input-class="text-right" class="text-black float-left">
-                    <template v-slot:append>
-                        <q-icon class="q-mr-sm" v-if="text === ''" name="search"></q-icon>
-                        <q-icon class="q-mr-sm cursor-pointer" v-else name="clear" @click="text = ''"></q-icon>
-                    </template>
-                </q-input>
-            </div>
+            <!--<q-input dense borderless v-model="text" input-class="text-right" class="text-black float-left">-->
+            <!--<template v-slot:append>-->
+            <!--<q-icon class="q-mr-sm" v-if="text === ''" name="search"></q-icon>-->
+            <!--<q-icon class="q-mr-sm cursor-pointer" v-else name="clear" @click="text = ''"></q-icon>-->
+            <!--</template>-->
+            <!--</q-input>-->
+            <!--</div>-->
             <q-fab
                     v-model="fabLeft"
                     vertical-actions-align="left"
@@ -63,30 +63,29 @@
             >
                 <q-fab-action label-position="right" color="primary" icon="bookmark" @click="fabLeft=true"
                               label="Bookmarks" class="q-mr-md">
-                    <q-menu transition-show="rotate" transition-hide="rotate" max-width="300px" class="q-ml-md"
+                    <q-menu :content-style="{ border: '4px solid grey' }" transition-show="rotate" transition-hide="rotate" max-width="260px" class="q-ml-md"
                             anchor="bottom right" self="bottom left">
                         <div class="row">
                             <div class="col-12">
                                 <div class="text-white">
-                                    <q-toolbar class="bg-white text-black" style="border: 1px solid lightgray">
-                                        <q-toolbar-title class="text-grey-8">Bookmarks</q-toolbar-title>
-                                    </q-toolbar>
+                                    <!--<q-toolbar class="bg-white text-black" style="border: 1px solid lightgray">-->
+                                        <!--<q-toolbar-title class="text-grey-8">Bookmarks</q-toolbar-title>-->
+                                    <!--</q-toolbar>-->
                                     <!--<q-scroll-area :style="{'height':win_height+'px'}" style="border: 1px solid lightgrey">-->
                                     <q-list dense separator>
                                         <q-item-section class="q-pa-sm">
                                             <q-input clearable dense outlined v-model="search_bookmark"
-                                                     label="Search"></q-input>
+                                                     label="Search bookmarks"></q-input>
                                         </q-item-section>
-                                        <q-item class="text-grey-9" clickable v-ripple
-                                                v-for="item in get_all_filtered_bookmarks" @click="goToUrl(item.url)">
-                                            <q-item-section avatar>
-                                                <q-avatar square>
-                                                    <!--<q-img style="width: 27px;" :src="'chrome://favicon/'+item.url"></q-img>-->
-                                                    <q-img style="width: 27px;"
-                                                           :src="'https://besticon-demo.herokuapp.com/icon?url='+item.url+'&size=32..50..120'"></q-img>
-                                                </q-avatar>
+                                        <q-item class="text-grey-9" v-ripple
+                                                v-for="item,index_bk in get_all_filtered_bookmarks">
+                                            <q-item-section side>
+                                                <q-icon @click="removeBookmark(item)"  @mouseover="selected_index_bk=index_bk" @mouseleave="selected_index_bk=null" :name="selected_index_bk==index_bk ? 'close' : 'star'"  class="cursor-pointer" color="orange"><q-tooltip>Remove</q-tooltip></q-icon>
                                             </q-item-section>
-                                            <q-item-section class="ellipsis-2-lines q-py-sm">{{item.title}}
+                                            <q-item-section  @click="goToUrl(item.url)"  top class="q-py-sm text-indigo">
+                                                <!--<q-img style="width: 27px;" class="float-left"-->
+                                                <!--:src="'https://besticon-demo.herokuapp.com/icon?url='+item.url+'&size=32..50..120'"></q-img>-->
+                                                <span class="ellipsis full-width cursor-pointer">{{item.title}}</span>
                                             </q-item-section>
                                         </q-item>
                                     </q-list>
@@ -99,28 +98,34 @@
                 </q-fab-action>
                 <q-fab-action label-position="right" color="secondary" icon="tab" @click="fabLeft=true"
                               label="Open tabs">
-                    <q-menu transition-show="rotate" transition-hide="rotate" max-width="300px" class="q-ml-md"
+                    <q-menu :content-style="{ border: '4px solid grey' }" transition-show="rotate" transition-hide="rotate" max-width="260px" class="q-ml-md"
                             anchor="bottom right" self="bottom left">
                         <div class="row">
                             <div class="col-12">
                                 <div class="text-white">
-                                    <q-toolbar class="bg-white text-black" style="border: 1px solid lightgray">
-                                        <q-toolbar-title class="text-grey-8">Open tabs</q-toolbar-title>
-                                    </q-toolbar>
+                                    <!--<q-toolbar class="bg-white text-black" style="border: 1px solid lightgray">-->
+                                        <!--<q-toolbar-title class="text-grey-8">Open tabs</q-toolbar-title>-->
+                                    <!--</q-toolbar>-->
                                     <!--<q-scroll-area :style="{'height':win_height+'px'}" style="border: 1px solid lightgrey">-->
                                     <q-list dense separator>
                                         <q-item-section class="q-pa-sm">
                                             <q-input clearable dense outlined v-model="search_open_tabs"
-                                                     label="Search"></q-input>
+                                                     label="Search open tabs"></q-input>
                                         </q-item-section>
                                         <q-item class="text-grey-9 q-px-xs" clickable v-ripple
-                                                v-for="item in get_all_open_tabs" @click="switchTab(item.id)">
-                                            <q-item-section avatar>
-                                                <q-avatar square>
-                                                    <q-img style="width: 27px;" :src="item.favIconUrl"></q-img>
-                                                </q-avatar>
+                                                v-for="item,index in get_all_open_tabs">
+                                            <!--<q-item-section avatar>-->
+                                                <!--<q-avatar square>-->
+                                                    <!--<q-img style="width: 27px;" :src="item.favIconUrl"></q-img>-->
+                                                <!--</q-avatar>-->
+                                            <!--</q-item-section>-->
+                                            <q-item-section side>
+                                                <q-icon @click="closeTab(item)" @mouseover="selected_index=index" @mouseleave="selected_index=null" :name="selected_index==index ? 'close' : 'tab'" color="orange">
+                                                <q-tooltip>Close</q-tooltip>
+                                                </q-icon>
                                             </q-item-section>
-                                            <q-item-section class="ellipsis-2-lines q-py-sm">{{item.title}}
+                                            <q-item-section @click="switchTab(item.id)" class="q-py-sm text-indigo">
+                                                <span class="ellipsis cursor-pointer full-width">{{item.title}}</span>
                                             </q-item-section>
                                         </q-item>
                                     </q-list>
