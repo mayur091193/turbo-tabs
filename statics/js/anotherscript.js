@@ -8,13 +8,36 @@ new Vue({
             all_bookmarks: [],
             all_open_tabs: [],
             fabLeft: false,
-            text:'',
-            selected_index:null,
-            selected_index_bk:null,
+            text: '',
+            selected_index: null,
+            selected_index_bk: null,
+            mdl_tabs: false,
+            width: 400,
+            splitterModel: 50,
+            bg_color: '#000000',
+            pattern_color: '#ffffff',
+            text_color: '#ffffff',
+            search_text: '',
+            live_time: '',
+            random_str:"",
+            all_quotes:["The Way To Get Started Is To Quit Talking And Begin Doing.",
+                        "Don't Let Yesterday Take Up Too Much Of Today.",
+                        "You Learn More From Failure Than From Success. Don't Let It Stop You. Failure Builds Character.",
+                        "If You Are Working On Something That You Really Care About, You Don't Have To Be Pushed. The Vision Pulls You.",
+                        "People Who Are Crazy Enough To Think They Can Change The World, Are The Ones Who Do.",
+                        "Failure Will Never Overtake Me If My Determination To Succeed Is Strong Enough.",
+                        "We Generate Fears While We Sit. We Overcome Them By Action.",
+                        "Whether You Think You Can Or Think You Can't, You're Right.",
+                        "We May Encounter Many Defeats But We Must Not Be Defeated."]
         }
     },
     created() {
         let self = this;
+
+        self.random_str = self.all_quotes[Math.floor(Math.random() * self.all_quotes.length)]
+
+        self.startTime();
+
         chrome.bookmarks.getTree(function (bookmarks) {
             self.process_bookmark(bookmarks);
             self.all_bookmarks.reverse();
@@ -29,20 +52,81 @@ new Vue({
             });
             self.all_open_tabs.reverse();
         });
+
+        //Background...
+        let selected_bg_color = self.$q.localStorage.getItem('selected_bg_color');
+        if (selected_bg_color) {
+            self.bg_color = selected_bg_color;
+        }
+
+        //Pattern...
+        let selected_pattern_color = self.$q.localStorage.getItem('selected_pattern_color');
+        if (selected_pattern_color) {
+            self.pattern_color = selected_pattern_color;
+        }
+        //Pattern...
+        let text_color = self.$q.localStorage.getItem('text_color');
+        if (text_color) {
+            self.text_color = text_color;
+        }
+
     },
     methods: {
-        removeBookmark:function (objbookmark){
+        checkTime: function(i) {
+            if (i < 10) {
+                i = "0" + i
+            }; // add zero in front of numbers < 10
+            return i;
+        },
+        startTime: function () {
+            var today = new Date();
+            var h = today.getHours();
+            var m = today.getMinutes();
+            var s = today.getSeconds();
+            m = this.checkTime(m);
+            s = this.checkTime(s);
+            this.live_time =
+                h + ":" + m + ":" + s;
+            var t = setTimeout(this.startTime, 500);
+        },
+        goSearch: function () {
+            if (this.search_text) {
+                window.location.href = "https://www.google.com/search?q=" + this.search_text;
+            }
+        },
+        changeBgColor: function () {
+            this.$q.localStorage.set('selected_bg_color', this.bg_color);
+        },
+        changeTimeColor: function () {
+            this.$q.localStorage.set('text_color', this.text_color);
+        },
+        changePatternColor: function () {
+            this.$q.localStorage.set('selected_pattern_color', this.pattern_color);
+            this.init_particle_canvas();
+        },
+        swapColors: function () {
+            let bg_color = this.bg_color;
+            let pattern_color = this.pattern_color;
+
+            this.bg_color = pattern_color;
+            this.pattern_color = bg_color;
+
+            this.$q.localStorage.set('selected_bg_color', pattern_color);
+            this.$q.localStorage.set('selected_pattern_color', bg_color);
+            this.init_particle_canvas();
+        },
+        removeBookmark: function (objbookmark) {
             let self = this;
             chrome.bookmarks.remove(objbookmark.id);
             self.all_bookmarks = self.all_bookmarks.filter(function (item) {
-               return item.id != objbookmark.id;
+                return item.id != objbookmark.id;
             });
         },
-        closeTab:function (obj_tab){
+        closeTab: function (obj_tab) {
             let self = this;
             chrome.tabs.remove(obj_tab.id);
             self.all_open_tabs = self.all_open_tabs.filter(function (item) {
-               return item.id != obj_tab.id;
+                return item.id != obj_tab.id;
             });
         },
         process_bookmark: function (bookmarks) {
@@ -58,13 +142,14 @@ new Vue({
                 }
             }
         },
-        switchTab: function (tab_id){
+        switchTab: function (tab_id) {
             chrome.tabs.update(tab_id, {selected: true});
         },
-        goToUrl: function (url){
-            location.href=url;
+        goToUrl: function (url) {
+            location.href = url;
         },
         init_particle_canvas: function () {
+            let self = this;
             var pJS = function (tag_id, params) {
 
                 var canvas_el = document.querySelector('#' + tag_id + ' > .particles-js-canvas-el');
@@ -1591,13 +1676,13 @@ new Vue({
                         }
                     },
                     "color": {
-                        "value": "#ffffff"
+                        "value": self.pattern_color
                     },
                     "shape": {
                         "type": "circle",
                         "stroke": {
                             "width": 0,
-                            "color": "#000000"
+                            "color": self.pattern_color
                         },
                         "polygon": {
                             "nb_sides": 5
@@ -1631,7 +1716,7 @@ new Vue({
                     "line_linked": {
                         "enable": true,
                         "distance": 150,
-                        "color": "#ffffff",
+                        "color": self.pattern_color,
                         "opacity": 0.4,
                         "width": 1
                     },

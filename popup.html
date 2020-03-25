@@ -1,7 +1,8 @@
 <html>
 <head>
-    <link href="https://cdn.jsdelivr.net/npm/quasar@1.9.0/dist/quasar.min.css" rel="stylesheet" type="text/css">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="statics/lib/quasar.min.css" rel="stylesheet" type="text/css">
+    <link href="statics/lib/material_icon.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Lato:100,300,400,700,900" rel="stylesheet">
     <style type="text/css">
         body {
             margin: 0;
@@ -18,15 +19,145 @@
             position: absolute;
             width: 100%;
             height: 100%;
-            background-color: #000000;
+        }
+
+        [v-cloak] > * {
+            display: none
+        }
+
+        [v-cloak]::before {
+            content: ""
         }
     </style>
 </head>
 <body>
-<div id="q-app">
+<div id="q-app" v-cloak style="font-family: 'Lato' !important;">
 
-    <q-layout view="hHh Lpr lFf" v-cloak>
-        <section style="min-height: 30vh;" class="flex text-white flex-center layout_bg" id="particles-js">
+    <q-layout view="hHh Lpr lFf">
+        <section style="min-height: 30vh;" :style="{'background-color':bg_color}"
+                 class="flex text-white flex-center layout_bg" id="particles-js">
+            <div class="fixed-top text-center q-mt-md">
+                <!--text-shadow: 1px 1px 2px black, 0 0 25px blue, 0 0 5px darkblue;-->
+                <span class="" :style="{'color':text_color}" style="font-size: 15px;letter-spacing: 0.5px;word-spacing: 0.7px">{{random_str}}</span></div>
+            <div class="fixed-top-right q-mt-md">
+                <q-btn class="q-ma-sm" dense icon="color_lens" color="primary">
+                    <q-tooltip transition-show="flip-right"
+                               transition-hide="flip-left" self="center left" anchor="center right">Background color
+                    </q-tooltip>
+                    <q-menu anchor="bottom left" self="bottom right" transition-show="flip-right"
+                            transition-hide="flip-left">
+                        <q-color
+                                v-model="bg_color"
+                                no-header
+                                no-footer
+                                default-view="palette"
+                                class="my-picker"
+                                @input="changeBgColor()"
+                        />
+                    </q-menu>
+                </q-btn>
+                <br>
+                <q-btn class="q-mx-sm" flat dense icon="swap_vert" @click="swapColors()" color="primary">
+                </q-btn>
+                <br>
+                <q-btn class="q-ma-sm" dense icon="colorize" color="primary">
+                    <!--<q-tooltip></q-tooltip>-->
+                    <q-tooltip transition-show="flip-right"
+                               transition-hide="flip-left" self="center left" anchor="center right">Pattern color
+                    </q-tooltip>
+                    <q-menu anchor="bottom left" self="bottom right" transition-show="flip-right"
+                            transition-hide="flip-left">
+                        <q-color
+                                v-model="pattern_color"
+                                no-header
+                                no-footer
+                                default-view="palette"
+                                class="my-picker"
+                                @input="changePatternColor()"
+                        />
+                    </q-menu>
+                </q-btn>
+                <br>
+                <br>
+                <br>
+                <q-btn class="q-ma-sm" dense icon="color_lens" color="primary">
+                    <q-tooltip transition-show="flip-right"
+                               transition-hide="flip-left" self="center right" anchor="center left">Text color
+                    </q-tooltip>
+                    <q-menu anchor="bottom left" self="bottom right" transition-show="flip-right"
+                            transition-hide="flip-left">
+                        <q-color
+                                v-model="text_color"
+                                no-header
+                                no-footer
+                                default-view="palette"
+                                class="my-picker"
+                                @input="changeTimeColor()"
+                        />
+                    </q-menu>
+                </q-btn>
+            </div>
+
+            <div class="fixed-center q-pa-md full-width" style="padding-left: 30%;padding-right: 30%">
+                <div class="text-center" style="font-size: 50px;">
+                    <span :style="{'color':text_color}" style="" class="">{{live_time}}</span>
+                </div>
+                <div class="bg-white" style="border-radius: 5px">
+
+                    <q-input class="q-mb-xl" outlined v-model="search_text" @keyup.enter="goSearch"
+                             label="Search Google">
+                        <template v-slot:prepend>
+                            <q-avatar>
+                                <img src="statics/images/google_logo.png">
+                            </q-avatar>
+                        </template>
+                    </q-input>
+                </div>
+            </div>
+
+            <!--<q-dialog v-model="mdl_tabs" :position="'right'" transition-show="flip-down" transition-hide="flip-up">-->
+            <!---->
+            <!--</q-dialog>-->
+
+            <!--<q-dialog v-model="mdl_tabs" :maximized="true" transition-show="flip-down" transition-hide="flip-up">-->
+
+
+            <!--<q-card class="bg-primary text-white">-->
+            <!--<q-bar>-->
+            <!--<span>Split screen</span>-->
+            <!--<q-space></q-space>-->
+            <!--<q-btn dense flat icon="close" class="float-right" v-close-popup>-->
+            <!--<q-tooltip content-class="bg-white text-primary">Close</q-tooltip>-->
+            <!--</q-btn>-->
+            <!--</q-bar>-->
+
+            <!--<q-card-section :style="{'height':(win_height-35)+'px'}">-->
+            <!--<q-splitter-->
+            <!--id="photos"-->
+            <!--v-model="splitterModel"-->
+            <!--:limits="[0, 100]"-->
+            <!--before-class="overflow-hidden"-->
+            <!--after-class="overflow-hidden"-->
+            <!--&gt;-->
+
+            <!--<template v-slot:before>-->
+            <!--<div class="full-height full-width q-pr-sm">-->
+            <!--<iframe class="full-height full-width" src="" target="_parent"></iframe>-->
+            <!--</div>-->
+            <!--</template>-->
+
+            <!--<template v-slot:after>-->
+            <!--<div class="full-height full-width q-pl-sm">-->
+            <!--<iframe class="full-height full-width" src="" target="_parent"></iframe>-->
+            <!--</div>-->
+            <!--</template>-->
+
+            <!--</q-splitter>-->
+            <!--</q-card-section>-->
+
+
+            <!--</q-card>-->
+            <!--</q-dialog>-->
             <!--<div class=" q-ma-sm bg-white rounded-borders" style="height: 38px;">-->
             <!--<q-avatar dense class="float-left" style="height: 37px">-->
             <!--<img style="height: 25px;width: 25px;"-->
@@ -54,6 +185,7 @@
             <!--</q-input>-->
             <!--</div>-->
             <q-fab
+                    id="fab_menu_icon"
                     v-model="fabLeft"
                     vertical-actions-align="left"
                     color="primary"
@@ -63,13 +195,14 @@
             >
                 <q-fab-action label-position="right" color="primary" icon="bookmark" @click="fabLeft=true"
                               label="Bookmarks" class="q-mr-md">
-                    <q-menu :content-style="{ border: '4px solid grey' }" transition-show="rotate" transition-hide="rotate" max-width="260px" class="q-ml-md"
+                    <q-menu :content-style="{ border: '4px solid grey' }" transition-show="rotate"
+                            transition-hide="rotate" max-width="260px" class="q-ml-md"
                             anchor="bottom right" self="bottom left">
                         <div class="row">
                             <div class="col-12">
                                 <div class="text-white">
                                     <!--<q-toolbar class="bg-white text-black" style="border: 1px solid lightgray">-->
-                                        <!--<q-toolbar-title class="text-grey-8">Bookmarks</q-toolbar-title>-->
+                                    <!--<q-toolbar-title class="text-grey-8">Bookmarks</q-toolbar-title>-->
                                     <!--</q-toolbar>-->
                                     <!--<q-scroll-area :style="{'height':win_height+'px'}" style="border: 1px solid lightgrey">-->
                                     <q-list dense separator>
@@ -80,9 +213,15 @@
                                         <q-item class="text-grey-9" v-ripple
                                                 v-for="item,index_bk in get_all_filtered_bookmarks">
                                             <q-item-section side>
-                                                <q-icon @click="removeBookmark(item)"  @mouseover="selected_index_bk=index_bk" @mouseleave="selected_index_bk=null" :name="selected_index_bk==index_bk ? 'close' : 'star'"  class="cursor-pointer" color="orange"><q-tooltip>Remove</q-tooltip></q-icon>
+                                                <q-icon @click="removeBookmark(item)"
+                                                        @mouseover="selected_index_bk=index_bk"
+                                                        @mouseleave="selected_index_bk=null"
+                                                        :name="selected_index_bk==index_bk ? 'close' : 'star'"
+                                                        class="cursor-pointer" color="orange">
+                                                    <q-tooltip>Remove</q-tooltip>
+                                                </q-icon>
                                             </q-item-section>
-                                            <q-item-section  @click="goToUrl(item.url)"  top class="q-py-sm text-indigo">
+                                            <q-item-section @click="goToUrl(item.url)" top class="q-py-sm text-indigo">
                                                 <!--<q-img style="width: 27px;" class="float-left"-->
                                                 <!--:src="'https://besticon-demo.herokuapp.com/icon?url='+item.url+'&size=32..50..120'"></q-img>-->
                                                 <span class="ellipsis full-width cursor-pointer">{{item.title}}</span>
@@ -98,13 +237,14 @@
                 </q-fab-action>
                 <q-fab-action label-position="right" color="secondary" icon="tab" @click="fabLeft=true"
                               label="Open tabs">
-                    <q-menu :content-style="{ border: '4px solid grey' }" transition-show="rotate" transition-hide="rotate" max-width="260px" class="q-ml-md"
+                    <q-menu :content-style="{ border: '4px solid grey' }" transition-show="rotate"
+                            transition-hide="rotate" max-width="260px" class="q-ml-md"
                             anchor="bottom right" self="bottom left">
                         <div class="row">
                             <div class="col-12">
                                 <div class="text-white">
                                     <!--<q-toolbar class="bg-white text-black" style="border: 1px solid lightgray">-->
-                                        <!--<q-toolbar-title class="text-grey-8">Open tabs</q-toolbar-title>-->
+                                    <!--<q-toolbar-title class="text-grey-8">Open tabs</q-toolbar-title>-->
                                     <!--</q-toolbar>-->
                                     <!--<q-scroll-area :style="{'height':win_height+'px'}" style="border: 1px solid lightgrey">-->
                                     <q-list dense separator>
@@ -115,13 +255,15 @@
                                         <q-item class="text-grey-9 q-px-xs" clickable v-ripple
                                                 v-for="item,index in get_all_open_tabs">
                                             <!--<q-item-section avatar>-->
-                                                <!--<q-avatar square>-->
-                                                    <!--<q-img style="width: 27px;" :src="item.favIconUrl"></q-img>-->
-                                                <!--</q-avatar>-->
+                                            <!--<q-avatar square>-->
+                                            <!--<q-img style="width: 27px;" :src="item.favIconUrl"></q-img>-->
+                                            <!--</q-avatar>-->
                                             <!--</q-item-section>-->
                                             <q-item-section side>
-                                                <q-icon @click="closeTab(item)" @mouseover="selected_index=index" @mouseleave="selected_index=null" :name="selected_index==index ? 'close' : 'tab'" color="orange">
-                                                <q-tooltip>Close</q-tooltip>
+                                                <q-icon @click="closeTab(item)" @mouseover="selected_index=index"
+                                                        @mouseleave="selected_index=null"
+                                                        :name="selected_index==index ? 'close' : 'tab'" color="orange">
+                                                    <q-tooltip>Close</q-tooltip>
                                                 </q-icon>
                                             </q-item-section>
                                             <q-item-section @click="switchTab(item.id)" class="q-py-sm text-indigo">
@@ -138,7 +280,8 @@
                 </q-fab-action>
             </q-fab>
 
-            <div class="fixed-bottom-right q-mr-md q-mb-xs text-weight-bold text-grey-7" style="font-size: 17px;">Made
+            <div class="fixed-bottom-right q-mr-md q-mb-xs" :style="{'color':text_color}"
+                 style="font-size: 17px;">Made
                 with
                 <span style="color: #e25555;font-size: 19.5px;">&#9829;</span> using
                 <a target="_blank" class="text-indigo-5" style="text-decoration: none"
@@ -148,9 +291,9 @@
     </q-layout>
 </div>
 </body>
-<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/material-design-lite/1.3.0/material.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/quasar@1.9.0/dist/quasar.umd.min.js"></script>
-<script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+<script src="statics/lib/vue.js"></script>
+<script src="statics/lib/material.min.js"></script>
+<script src="statics/lib/quasar.umd.min.js"></script>
+<script src="statics/lib/particles.min.js"></script>
 <script src=statics/js/anotherscript.js></script>
 </html>
