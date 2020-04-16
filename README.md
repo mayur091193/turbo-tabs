@@ -42,7 +42,7 @@ Thank you very much!!
 
 ## Published on Chrome Web Store
 
-[Trubo Tabs](https://chrome.google.com/webstore/detail/pfagelipodlapancgiiolcjafdbmjoob/publish-accepted?authuser=0&hl=en)
+[Trubo Tabs](https://chrome.google.com/webstore/detail/pfagelipodlapancgiiolcjafdbmjoob)
 
 ## How to run on local?
 
