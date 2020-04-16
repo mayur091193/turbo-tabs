@@ -1,4 +1,4 @@
-# Trubo Tabs - Chrome new tab extension
+# Turbo Tabs - Chrome new tab extension
 
 
 Replace new tab page with beautiful live pattern and access all open tabs link, all bookmarks and inspiration and much more!
