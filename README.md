@@ -7,6 +7,12 @@ Use this to be more productive, directly go to any open tabs from one place, acc
 
 Made with HTML, CSS, Quasar framework
 
+## Note
+
+Please note I've modified the structure on my own! And this repository is having the build of my own structure and not the Quasar BEX project! I would suggest you all to properly follow the Quasar BEX documentation! Quasar BEX mode is awesome and documentation is very well written!
+
+[Quasar BEX](https://quasar.dev/quasar-cli/developing-browser-extensions/preparation)
+
 ## Support
 
 If this hepls you in any way, you can contribute to this project by supporting me:
